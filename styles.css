@@ -1,0 +1,22 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 10px;
+    width: 250px;
+}
+
+#score {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.green {
+    color: green;
+}
+
+.yellow {
+    color: orange;
+}
+
+.red {
+    color: red;
+}
