@@ -1,27 +1,23 @@
 {
   "manifest_version": 3,
-  "name": "Sustainability Shopping Companion",
+  "name": "EcoTicker",
   "version": "1.0",
-  "description": "Shows sustainability scores and alternatives as you shop.",
-  "permissions": [
-    "activeTab",
-    "scripting"
-  ],
-  "host_permissions": [
-    "https://www.amazon.com/*"
-  ],
+  "permissions": ["activeTab", "storage", "scripting"],
+  "host_permissions": ["*://*/*"],
+  "web_accessible_resources": [{
+    "resources": ["esg-data.json"],
+    "matches": ["<all_urls>"]
+  }],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [{
+    "matches": ["*://*.amazon.com/*", "*://*.ebay.com/*"],
+    "js": ["content.js"],
+    "css": ["styles.css"]
+  }],
   "action": {
     "default_popup": "popup.html",
-    "default_icon": {
-      "16": "icon16.png",
-      "48": "icon48.png",
-      "128": "icon128.png"
-    }
-  },
-  "content_scripts": [
-    {
-      "matches": ["https://www.amazon.com/*"],
-      "js": ["content.js"]
-    }
-  ]
+    "default_icon": "icon.png"
+  }
 }

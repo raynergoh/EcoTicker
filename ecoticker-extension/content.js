@@ -1,11 +1,40 @@
-(function() {
-  // Try to extract product details using DOM selectors.
-  let productName = document.querySelector('#productTitle')?.innerText?.trim();
-  let brand = document.querySelector('#bylineInfo')?.innerText?.trim();
-  let material = document.querySelector('.material-info')?.innerText?.trim();
+// content.js - Injects ESG badges
+document.addEventListener('DOMContentLoaded', async () => {
+  const esgData = await fetch(chrome.runtime.getURL('esg-data.json'))
+    .then(response => response.json());
+  
+  const productElements = document.querySelectorAll('.product, .item, .listing');
+  
+  productElements.forEach(product => {
+    const brand = product.querySelector('.brand')?.textContent.trim();
+    if (!brand) return;
 
-  // Example: You could also extract price, category, etc.
+    const esgGrade = esgData[brand] || 'N/A';
+    const badge = createEsgBadge(esgGrade);
+    product.appendChild(badge);
+    
+    if(esgGrade !== 'N/A') {
+      addPurchaseTracking(product, esgGrade);
+    }
+  });
+});
 
-  // Send the data to the popup or background script.
-  chrome.runtime.sendMessage({ productName, brand, material });
-})();
+function createEsgBadge(grade) {
+  const badge = document.createElement('div');
+  badge.className = 'esg-badge';
+  badge.innerHTML = `
+    <div class="grade ${grade}">${grade}</div>
+    <div class="ticker">EcoTicker Rating</div>
+  `;
+  return badge;
+}
+
+function addPurchaseTracking(product, grade) {
+  const buyButton = product.querySelector('button, .add-to-cart');
+  if (!buyButton) return;
+
+  buyButton.addEventListener('click', () => {
+    const points = { 'A': 100, 'B': 50, 'C': 25 }[grade];
+    chrome.runtime.sendMessage({ type: 'ADD_POINTS', points });
+  });
+}
