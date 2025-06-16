@@ -1,18 +1,45 @@
-<!-- popup.html -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoTicker</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="ecoticker-popup">
-    <h1>🟢 EcoTicker</h1>
-    <div id="points-display">Loading points...</div>
-    <div class="rewards">
-      <h3>Available Rewards:</h3>
-      <ul id="rewards-list"></ul>
+    <div class="popup-container">
+        <header class="popup-header">
+            <h1><span class="icon">🌱</span>EcoTicker</h1>
+            <p>Your sustainable shopping companion.</p>
+        </header>
+
+        <main>
+            <section class="points-card">
+                <h2>Your EcoPoints</h2>
+                <div id="points-display" class="points-value">0</div>
+            </section>
+
+            <section class="rewards-section">
+                <h2>Redeem Rewards</h2>
+                <ul id="rewards-list">
+                    <!-- Reward items will be dynamically inserted by popup.js -->
+                    <!-- Placeholder for visual structure: -->
+                    <li>
+                        <span>$10 Tentree Voucher</span>
+                        <span class="points-cost">500 pts</span>
+                    </li>
+                    <li>
+                        <span>Patagonia Tote Bag</span>
+                        <span class="points-cost">1000 pts</span>
+                    </li>
+                </ul>
+            </section>
+        </main>
+
+        <footer class="popup-footer">
+            <a href="#" id="how-it-works">How scoring works</a>
+        </footer>
     </div>
-  </div>
-  <script src="popup.js"></script>
+    <script src="popup.js"></script>
 </body>
 </html>

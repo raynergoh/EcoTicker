@@ -1,35 +1,183 @@
-/* styles.css */
+/* 
+  styles.css for EcoTicker
+  - Uses CSS variables for theming and dark mode.
+  - Implements a minimalist, clean, and intuitive design.
+*/
+
+/* 1. THEME & COLOR PALETTE ------------------------- */
+:root {
+    --background: #f4f7f6;
+    --card-bg: #ffffff;
+    --text-primary: #2c3e50;
+    --text-secondary: #7f8c8d;
+    --accent-green: #27ae60;
+    --accent-yellow: #f1c40f;
+    --accent-red: #e74c3c;
+    --border-color: #ecf0f1;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    --border-radius: 12px;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background: #2c3e50;
+        --card-bg: #34495e;
+        --text-primary: #ecf0f1;
+        --text-secondary: #bdc3c7;
+        --border-color: #4a6278;
+        --shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+}
+
+/* 2. BASE & POPUP STYLES ------------------------- */
+body {
+    background-color: var(--background);
+    color: var(--text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    width: 320px; /* Compact size for a browser action popup */
+}
+
+.popup-container {
+    padding: 20px;
+}
+
+/* 3. HEADER ------------------------- */
+.popup-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.popup-header h1 {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0 0 4px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.popup-header p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* 4. POINTS CARD ------------------------- */
+.points-card {
+    background-color: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow);
+}
+
+.points-card h2 {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin: 0 0 8px 0;
+}
+
+.points-value {
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--accent-green);
+    line-height: 1;
+}
+
+/* 5. REWARDS SECTION ------------------------- */
+.rewards-section h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 12px 0;
+    padding-left: 4px; /* Align with list items */
+}
+
+.rewards-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.rewards-section li {
+    background-color: var(--card-bg);
+    padding: 12px 16px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    border: 1px solid var(--border-color);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.rewards-section li:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+.points-cost {
+    font-weight: 600;
+    color: var(--accent-green);
+    background-color: rgba(39, 174, 96, 0.1);
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+/* 6. FOOTER ------------------------- */
+.popup-footer {
+    text-align: center;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-color);
+}
+
+.popup-footer a {
+    color: var(--text-secondary);
+    font-size: 12px;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.popup-footer a:hover {
+    color: var(--accent-green);
+    text-decoration: underline;
+}
+
+/* 7. ESG BADGE STYLES (for content.js) ------------------------- */
 .esg-badge {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: rgba(255, 255, 255, 0.9);
-  padding: 8px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  font-family: Arial, sans-serif;
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--card-bg);
+    padding: 6px 10px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    text-align: center;
+    z-index: 9999;
+    border: 1px solid var(--border-color);
 }
 
-.grade {
-  font-size: 24px;
-  font-weight: bold;
-  text-align: center;
+.esg-badge .grade {
+    font-size: 20px;
+    font-weight: 700;
 }
 
-.A { color: #4CAF50; }
-.B { color: #FFC107; }
-.C { color: #F44336; }
-
-.ecoticker-popup {
-  width: 300px;
-  padding: 20px;
+.esg-badge .ticker {
+    font-size: 9px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    letter-spacing: 0.5px;
 }
 
-.rewards ul {
-  padding-left: 20px;
-}
-
-#points-display {
-  font-size: 18px;
-  margin: 15px 0;
-}
+.esg-badge .A { color: var(--accent-green); }
+.esg-badge .B { color: var(--accent-yellow); }
+.esg-badge .C { color: var(--accent-red); }

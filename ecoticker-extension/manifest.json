@@ -2,22 +2,32 @@
   "manifest_version": 3,
   "name": "EcoTicker",
   "version": "1.0",
+  "description": "Displays ESG ratings for brands while you shop.",
   "permissions": ["activeTab", "storage", "scripting"],
   "host_permissions": ["*://*/*"],
-  "web_accessible_resources": [{
-    "resources": ["esg-data.json"],
-    "matches": ["<all_urls>"]
-  }],
-  "background": {
-    "service_worker": "background.js"
-  },
-  "content_scripts": [{
-    "matches": ["*://*.amazon.com/*", "*://*.ebay.com/*"],
-    "js": ["content.js"],
-    "css": ["styles.css"]
-  }],
+
   "action": {
     "default_popup": "popup.html",
     "default_icon": "icon.png"
-  }
+  },
+
+  "background": {
+    "service_worker": "background.js"
+  },
+
+  "content_scripts": [{
+    "matches": [
+      "*://*.amazon.sg/*", 
+      "*://*.walmart.com/*", 
+      "*://*.nike.com/sg/*",
+      "*://*.ikea.com/sg/en/*"
+      ],
+    "js": ["content.js"],
+    "css": ["styles.css"]
+  }],
+
+  "web_accessible_resources": [{
+    "resources": ["esg-data.json"],
+    "matches": ["<all_urls>"]
+  }]
 }
