@@ -1,38 +1,46 @@
-<!-- popup.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EcoTicker</title>
-    <!-- Change this link to point to the new popup.css file -->
     <link rel="stylesheet" href="popup.css">
 </head>
 <body>
-    <div class="popup-container">
-        <header class="popup-header">
-            <h1><span class="icon">🌱</span>EcoTicker</h1>
-            <p>Your sustainable shopping companion.</p>
-        </header>
+    <header class="popup-header">
+        <span class="header-logo">🌱</span>
+        <h1>EcoTicker</h1>
+    </header>
 
-        <main>
-            <section class="points-card">
-                <h2>Your EcoPoints</h2>
-                <div id="points-display" class="points-value">0</div>
+    <main class="popup-main">
+        <!-- Home Tab Content -->
+        <div id="home-tab-content" class="tab-content active">
+            <section class="points-hero">
+                <p>YOUR ECOPOINTS</p>
+                <div id="points-display">0</div>
             </section>
+            <section class="info-card">
+                <h3>How it Works</h3>
+                <p>Shop on partner sites like Nike or Amazon. We'll automatically add EcoPoints for purchases from sustainable brands!</p>
+            </section>
+        </div>
 
+        <!-- Rewards Tab Content -->
+        <div id="rewards-tab-content" class="tab-content">
             <section class="rewards-section">
-                <h2>Redeem Rewards</h2>
+                <h2>Available Rewards</h2>
                 <ul id="rewards-list">
-                    <!-- Reward items will be dynamically inserted by popup.js -->
+                    <!-- Rewards will be populated by popup.js -->
                 </ul>
             </section>
-        </main>
+        </div>
+    </main>
 
-        <footer class="popup-footer">
-            <a href="#" id="how-it-works">How scoring works</a>
-        </footer>
-    </div>
+    <footer class="popup-footer">
+        <div id="home-tab-button" class="footer-item active">🏠<br><span>Home</span></div>
+        <div id="rewards-tab-button" class="footer-item">🎁<br><span>Rewards</span></div>
+        <div id="settings-tab-button" class="footer-item">⚙️<br><span>Settings</span></div>
+    </footer>
     <script src="popup.js"></script>
 </body>
 </html>
