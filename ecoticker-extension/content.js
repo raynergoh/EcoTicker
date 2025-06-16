@@ -1,70 +1,100 @@
 // content.js
 
 /**
- * Main function that runs when the e-commerce page is loaded.
+ * Configuration for different e-commerce sites.
+ * This makes the extension adaptable and easy to expand.
  */
-async function main() {
-  // 1. Fetch the ESG data from the extension's local files.
-  // chrome.runtime.getURL is required to access extension files from a content script [3].
+const SITE_CONFIGS = {
+  'nike.com': {
+    type: 'single_brand',
+    brand: 'Nike',
+    injectionPoint: 'body', // The element where the banner will be injected
+    injectionMethod: 'prepend' // 'prepend' adds the banner at the very top
+  },
+  'ikea.com': {
+    type: 'single_brand',
+    brand: 'IKEA',
+    injectionPoint: 'body',
+    injectionMethod: 'prepend'
+  },
+  'amazon.com': {
+    type: 'marketplace',
+    productSelector: '[data-component-type="s-search-result"]',
+    brandSelector: '.s-line-clamp-1 .a-size-base-plus'
+  }
+};
+
+/**
+ * Main function that runs when the page loads.
+ */
+async function runEcoTicker() {
   const esgData = await fetch(chrome.runtime.getURL('esg-data.json'))
     .then(response => response.json());
 
-  // 2. Find all potential product listings on the page.
-  // Note: These selectors are examples and need to be tailored for each site.
-  const productElements = document.querySelectorAll(
-    '[data-component-type="s-search-result"], .product-item, .w-_JS' 
-  );
+  const currentHostname = window.location.hostname;
+  const siteConfig = Object.keys(SITE_CONFIGS).find(domain => currentHostname.includes(domain));
 
-  // 3. Process each product element found.
-  productElements.forEach(productEl => {
-    const brandName = findBrand(productEl);
-    if (brandName && esgData[brandName]) {
-      const esgGrade = esgData[brandName];
-      injectBadge(productEl, esgGrade);
+  if (siteConfig) {
+    const config = SITE_CONFIGS[siteConfig];
+    if (config.type === 'single_brand') {
+      handleSingleBrandSite(esgData, config);
+    } else {
+      handleMarketplaceSite(esgData, config);
+    }
+  }
+}
+
+/**
+ * Injects a single banner for sites like nike.com.
+ */
+function handleSingleBrandSite(esgData, config) {
+  const esgGrade = esgData[config.brand];
+  if (esgGrade && !document.querySelector('.ecoticker-site-banner')) {
+    const banner = document.createElement('div');
+    banner.className = 'ecoticker-site-banner';
+    banner.innerHTML = `
+      <div class="banner-content">
+        🌱 <strong>${config.brand}</strong> has an EcoTicker ESG Rating of <span class="grade ${esgGrade}">${esgGrade}</span>
+      </div>
+    `;
+    document.querySelector(config.injectionPoint)?.prepend(banner);
+  }
+}
+
+/**
+ * Scans for product cards and injects individual badges on marketplaces.
+ */
+function handleMarketplaceSite(esgData, config) {
+  const observer = new MutationObserver(() => {
+    scanForProducts(esgData, config);
+  });
+  scanForProducts(esgData, config); // Initial scan
+  observer.observe(document.body, { childList: true, subtree: true });
+}
+
+function scanForProducts(esgData, config) {
+  document.querySelectorAll(config.productSelector).forEach(productEl => {
+    if (productEl.querySelector('.esg-badge')) return; // Skip if badge exists
+
+    const brandEl = productEl.querySelector(config.brandSelector);
+    if (brandEl) {
+      const brandName = brandEl.textContent.trim();
+      if (esgData[brandName]) {
+        injectProductBadge(productEl, esgData[brandName]);
+      }
     }
   });
 }
 
 /**
- * Finds the brand name within a product element. This is the most complex part,
- * as every website has a different HTML structure.
- * @param {HTMLElement} element - The container element for a single product.
- * @returns {string|null} - The found brand name or null.
+ * Creates and injects the small product badge.
  */
-function findBrand(element) {
-  // Try a few common selector patterns for brand names
-  const selectors = ['[data-cy="item-brand"]', '.s-line-clamp-1 .a-size-base-plus'];
-  for (const selector of selectors) {
-    const brandElement = element.querySelector(selector);
-    if (brandElement && brandElement.textContent.trim()) {
-      return brandElement.textContent.trim();
-    }
-  }
-  // Add more specific logic for sites like IKEA, which might not list external brands.
-  if (window.location.hostname.includes("ikea.com")) return "IKEA";
-  return null;
-}
-
-/**
- * Creates and injects the ESG badge into the specified product element.
- * @param {HTMLElement} targetElement - The element to attach the badge to.
- * @param {string} grade - The ESG grade ('A', 'B', 'C').
- */
-function injectBadge(targetElement, grade) {
-  // Avoid injecting duplicate badges
-  if (targetElement.querySelector('.esg-badge')) return;
-
+function injectProductBadge(targetElement, grade) {
   const badge = document.createElement('div');
   badge.className = 'esg-badge';
-  badge.innerHTML = `
-    <div class="grade ${grade}">${grade}</div>
-    <div class="ticker">Eco-Rating</div>
-  `;
-  
-  // Position the badge relative to the target element
+  badge.innerHTML = `<div class="grade ${grade}">${grade}</div><div class="ticker">Eco-Rating</div>`;
   targetElement.style.position = 'relative';
   targetElement.appendChild(badge);
 }
 
-// Run the script
-main();
+runEcoTicker();
