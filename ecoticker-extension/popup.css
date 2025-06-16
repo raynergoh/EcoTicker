@@ -1,9 +1,5 @@
-/* 
-  styles.css for EcoTicker
-  - Fully corrected version to fix the banner overlap issue.
-*/
 
-/* 1. THEME & COLOR PALETTE ------------------------- */
+/* 1. THEME & POPUP-SPECIFIC STYLES ------------------------- */
 :root {
     --background: #f4f7f6;
     --card-bg: #ffffff;
@@ -28,7 +24,7 @@
     }
 }
 
-/* 2. BASE & POPUP STYLES ------------------------- */
+/* This is the rule that should ONLY apply to the popup */
 body {
     background-color: var(--background);
     color: var(--text-primary);
@@ -41,12 +37,11 @@ body {
     padding: 20px;
 }
 
-/* 3. HEADER ------------------------- */
+/* HEADER */
 .popup-header {
     text-align: center;
     margin-bottom: 24px;
 }
-
 .popup-header h1 {
     font-size: 24px;
     font-weight: 600;
@@ -56,14 +51,13 @@ body {
     justify-content: center;
     gap: 8px;
 }
-
 .popup-header p {
     font-size: 14px;
     color: var(--text-secondary);
     margin: 0;
 }
 
-/* 4. POINTS CARD ------------------------- */
+/* POINTS CARD */
 .points-card {
     background-color: var(--card-bg);
     border-radius: var(--border-radius);
@@ -72,14 +66,12 @@ body {
     margin-bottom: 24px;
     box-shadow: var(--shadow);
 }
-
 .points-card h2 {
     font-size: 16px;
     font-weight: 500;
     color: var(--text-secondary);
     margin: 0 0 8px 0;
 }
-
 .points-value {
     font-size: 48px;
     font-weight: 700;
@@ -87,14 +79,13 @@ body {
     line-height: 1;
 }
 
-/* 5. REWARDS SECTION ------------------------- */
+/* REWARDS SECTION */
 .rewards-section h2 {
     font-size: 18px;
     font-weight: 600;
     margin: 0 0 12px 0;
     padding-left: 4px;
 }
-
 .rewards-section ul {
     list-style: none;
     padding: 0;
@@ -103,7 +94,6 @@ body {
     flex-direction: column;
     gap: 8px;
 }
-
 .rewards-section li {
     background-color: var(--card-bg);
     padding: 12px 16px;
@@ -115,12 +105,10 @@ body {
     border: 1px solid var(--border-color);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-
 .rewards-section li:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow);
 }
-
 .points-cost {
     font-weight: 600;
     color: var(--accent-green);
@@ -130,96 +118,20 @@ body {
     font-size: 12px;
 }
 
-/* 6. FOOTER ------------------------- */
+/* FOOTER */
 .popup-footer {
     text-align: center;
     margin-top: 24px;
     padding-top: 16px;
     border-top: 1px solid var(--border-color);
 }
-
 .popup-footer a {
     color: var(--text-secondary);
     font-size: 12px;
     text-decoration: none;
     transition: color 0.2s ease;
 }
-
 .popup-footer a:hover {
     color: var(--accent-green);
     text-decoration: underline;
 }
-
-/* 7. ESG BADGE STYLES (for product cards) ------------------------- */
-.esg-badge {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    z-index: 9999;
-    background: #ffffff;
-    color: #2c3e50;
-    padding: 6px 10px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    text-align: center;
-    border: 1px solid #ecf0f1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    transition: transform 0.2s ease;
-}
-
-.esg-badge:hover {
-    transform: scale(1.05);
-}
-
-.esg-badge .grade {
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 1;
-}
-
-.esg-badge .ticker {
-    font-size: 9px;
-    text-transform: uppercase;
-    color: #7f8c8d;
-    letter-spacing: 0.5px;
-}
-
-/* 8. SITE-WIDE BANNER STYLE (Corrected) ------------------------- */
-.ecoticker-site-banner {
-    /* The position:sticky rule was removed to fix the overlap issue. */
-    /* This banner now behaves as a normal block, pushing content down. */
-    width: 100%;
-    background-color: #2c3e50;
-    color: #ecf0f1;
-    padding: 12px 0;
-    text-align: center;
-    font-size: 16px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-}
-
-.ecoticker-site-banner .grade {
-    font-weight: 700;
-    font-size: 18px;
-    padding: 2px 8px;
-    border-radius: 6px;
-    display: inline-block;
-    vertical-align: middle;
-    margin-left: 4px;
-}
-
-/* 9. CONSOLIDATED GRADE COLORS ------------------------- */
-.grade.A, .esg-badge .A {
-    color: var(--accent-green);
-}
-.grade.B, .esg-badge .B {
-    color: var(--accent-yellow);
-}
-.grade.C, .esg-badge .C {
-    color: var(--accent-red);
-}
-
