@@ -9,7 +9,10 @@
     "scripting"
   ],
   "host_permissions": [
-    "*://*/*"
+    "*://*.nike.com/*",
+    "*://localhost:3000/*",
+    "*://*.nike.com.sg/*",
+    "https://api.openai.com/*"
   ],
 
   "action": {
@@ -28,7 +31,8 @@
       "*://*.target.com/*",
       "*://*.ikea.com/*",
       "*://*.adidas.com.sg/*",
-      "*://*.nike.com/*"
+      "*://*.nike.com/*",
+      "*://*.nike.com.sg/*"
     ],
     "js": [
       "openai-service.js",
@@ -43,7 +47,8 @@
     "resources": [
       "esg-data.json",
       "openai-service.js",
-      "sustainability-panel.js"
+      "sustainability-panel.js",
+      "config.json"
     ],
     "matches": ["<all_urls>"]
   }]

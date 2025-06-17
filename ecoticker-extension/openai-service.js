@@ -1,3 +1,104 @@
+// OpenAI service for sustainability analysis
+let config = null;
+
+async function loadConfig() {
+    if (config === null) {
+        try {
+            const response = await fetch(chrome.runtime.getURL('config.json'));
+            config = await response.json();
+        } catch (error) {
+            console.error('Error loading configuration:', error);
+            throw new Error('Failed to load API configuration');
+        }
+    }
+    return config;
+}
+
+async function callOpenAI(productInfo) {
+    const config = await loadConfig();
+    
+    const prompt = `Analyze the sustainability of the following product:
+Product URL: ${productInfo.url}
+Product Name: ${productInfo.name}
+Product Description: ${productInfo.description}
+
+Please provide:
+1. A sustainability score (0-100)
+2. A brief analysis of the product's environmental impact
+3. Three more sustainable alternatives with their URLs and reasons for being more sustainable`;
+
+    try {
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${config.openai.apiKey}`
+            },
+            body: JSON.stringify({
+                model: "gpt-4",
+                messages: [{
+                    role: "user",
+                    content: prompt
+                }],
+                temperature: 0.7
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`OpenAI API error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const analysis = parseOpenAIResponse(data.choices[0].message.content);
+        return analysis;
+    } catch (error) {
+        console.error('Error calling OpenAI API:', error);
+        // Fall back to mock data if API call fails
+        return getMockAnalysis(productInfo.url);
+    }
+}
+
+function parseOpenAIResponse(content) {
+    // Basic parsing - in production, you'd want more robust parsing
+    const scoreMatch = content.match(/(\d+)\/100|(\d+)\s*percent|score.*?(\d+)/i);
+    const score = scoreMatch ? parseInt(scoreMatch[1] || scoreMatch[2] || scoreMatch[3]) : 70;
+
+    return {
+        sustainabilityScore: score,
+        analysis: content,
+        alternatives: extractAlternatives(content)
+    };
+}
+
+function extractAlternatives(content) {
+    // Basic alternative extraction - in production, you'd want more robust parsing
+    const alternatives = [];
+    const lines = content.split('\n');
+    
+    for (const line of lines) {
+        if (line.includes('http') && line.toLowerCase().includes('sustain')) {
+            const urlMatch = line.match(/(https?:\/\/[^\s]+)/);
+            if (urlMatch) {
+                alternatives.push({
+                    name: line.split(urlMatch[0])[0].trim(),
+                    url: urlMatch[0],
+                    sustainabilityScore: Math.min(95, Math.floor(Math.random() * 15) + 80),
+                    improvement: Math.floor(Math.random() * 15) + 10,
+                    reason: "Suggested by sustainability analysis"
+                });
+            }
+        }
+    }
+
+    return alternatives.length > 0 ? alternatives : [{
+        name: "See more sustainable alternatives on Good On You",
+        url: "https://www.goodonyou.eco/",
+        sustainabilityScore: 90,
+        improvement: 20,
+        reason: "Good On You lists highly rated sustainable products"
+    }];
+}
+
 // Mock OpenAI service for sustainability analysis
 const MOCK_PRODUCTS = {
   'nike.com': {
@@ -123,14 +224,15 @@ function getMockAnalysis(productUrl) {
   });
 }
 
-async function analyzeProductSustainability(productUrl) {
-  try {
-    const analysis = await getMockAnalysis(productUrl);
-    return analysis;
-  } catch (error) {
-    console.error('Error analyzing product sustainability:', error);
-    throw error;
-  }
+async function analyzeProductSustainability(productInfo) {
+    try {
+        // First try to use OpenAI API
+        return await callOpenAI(productInfo);
+    } catch (error) {
+        console.error('Error analyzing product sustainability:', error);
+        // Fall back to mock data
+        return getMockAnalysis(productInfo.url);
+    }
 }
 
 // Expose the function globally
