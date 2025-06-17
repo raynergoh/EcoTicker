@@ -27,6 +27,7 @@
       "*://*.walmart.com/*", 
       "*://*.target.com/*",
       "*://*.ikea.com/*",
+      "*://*.adidas.com.sg/*",
       "*://*.nike.com/*"
     ],
     "js": [

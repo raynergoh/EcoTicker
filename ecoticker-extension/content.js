@@ -16,6 +16,13 @@ const SITE_CONFIGS = {
     injectionPoint: 'body',
     productSelector: '.product-pip'
   },
+  'adidas.com.sg': {
+    type: 'single_brand',
+    brand: 'Adidas',
+    // You would add Adidas's logo URL here
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/2/20/Adidas_Logo.svg',
+    injectionPoint: 'body'
+  },
   'amazon.com': {
     type: 'marketplace',
     productSelector: '[data-component-type="s-search-result"]',
