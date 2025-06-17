@@ -123,11 +123,6 @@ ecoticker-extension/ ├── manifest.json # Extension config ├── popup.
 
 ---
 
-## 📜 License
-
-MIT License
-
----
 
 ## 🙏 Acknowledgments
 
