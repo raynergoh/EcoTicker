@@ -3,6 +3,11 @@
 EcoTicker is a Chrome extension that empowers you to shop more sustainably by providing real-time sustainability scores and actionable insights for products and brands as you browse popular e-commerce sites. While currently optimized for Nike, EcoTicker is built for easy expansion to platforms (Currently Nike).
 
 ---
+## Status
+
+- Completed the front-end aspect and have a rough working model and metrics for the calculating of sustainability score with some backend implementation. Yet to implement the backend for the points system as well as a recommend alternative function.
+
+---
 
 ## 🚀 Features
 
@@ -179,7 +184,9 @@ again in the `server` directory.
 
 ## 📬 Contact
 
-Your Name — Rayner Goh (raynergoh03@gmail.com)  
+Rayner Goh (raynergoh03@gmail.com)
+Yeo Chen Xian (chenxian0603@gmail.com)
+Josh Loh
 Project Link: [https://github.com/raynergoh/ecoticker](https://github.com/raynergoh/ecoticker)
 
 ---
