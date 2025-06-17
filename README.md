@@ -50,7 +50,7 @@ EcoTicker's scoring system is inspired by leading frameworks like Eco-Score, Hig
 | End-of-Life & Circularity | 15         | Recyclable, take-back programs, closed-loop efforts|
 | Packaging Sustainability  | 10         | Recycled/minimal packaging, certifications        |
 
-- **No info for a category:** Score of -1 for that category.
+- **No info for a category:** Score of <5> for that category.
 - **Final grade:**  
   - A = 85–100  
   - B = 70–84  
@@ -63,7 +63,7 @@ EcoTicker's scoring system is inspired by leading frameworks like Eco-Score, Hig
 
 ## 🏆 Rewards Program
 
-Earn EcoPoints for sustainable actions and redeem them for rewards:
+Earn EcoPoints for sustainable actions and redeem them for rewards, Examples:
 
 | Reward                                   | Points Needed |
 |-------------------------------------------|--------------|
