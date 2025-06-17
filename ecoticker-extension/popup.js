@@ -2,16 +2,15 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- Tab Switching Logic ---
     const tabButtons = {
-        home: document.getElementById('home-tab-button'),
-        rewards: document.getElementById('rewards-tab-button'),
-        settings: document.getElementById('settings-tab-button')
+        home: document.querySelector('#home-tab-button'),
+        rewards: document.querySelector('#rewards-tab-button'),
+        about: document.querySelector('#about-tab-button')
     };
 
     const tabContents = {
         home: document.getElementById('home-tab-content'),
         rewards: document.getElementById('rewards-tab-content'),
-        // Add a settings content div in HTML if you want to use this tab
-        // settings: document.getElementById('settings-tab-content') 
+        about: document.getElementById('about-tab-content')
     };
 
     function switchTab(tabName) {
@@ -20,17 +19,17 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.classList.remove('active');
         }
         for (const content of Object.values(tabContents)) {
-            if (content) content.classList.remove('active');
+            content.classList.remove('active');
         }
-
-        // Activate the selected tab and content
-        if (tabButtons[tabName]) tabButtons[tabName].classList.add('active');
-        if (tabContents[tabName]) tabContents[tabName].classList.add('active');
+        // Activate selected
+        tabButtons[tabName].classList.add('active');
+        tabContents[tabName].classList.add('active');
     }
 
-    tabButtons.home.addEventListener('click', () => switchTab('home'));
-    tabButtons.rewards.addEventListener('click', () => switchTab('rewards'));
-    // tabButtons.settings.addEventListener('click', () => switchTab('settings'));
+    // Add event listeners
+    for (const [tabName, btn] of Object.entries(tabButtons)) {
+        btn.addEventListener('click', () => switchTab(tabName));
+    }
 
     // --- Data Loading Logic ---
     // Load and display points
@@ -47,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const rewardsList = document.getElementById('rewards-list');
-    rewardsList.innerHTML = ''; // Clear any existing items
+    rewardsList.innerHTML = '';
     for (const [points, reward] of Object.entries(rewards)) {
         const li = document.createElement('li');
         li.innerHTML = `${reward} <span class="points-cost">${points} pts</span>`;
