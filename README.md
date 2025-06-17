@@ -154,22 +154,13 @@ again in the `server` directory.
 
 - **Prerequisites:** Chrome Browser, basic JS & Chrome Extension API knowledge.
 - **Workflow:** Edit source files, reload extension, test on supported sites.
-- **Key Components:** Popup UI, content scripts (scoring/analysis), background service (storage, API).
+- **Key Components:** Popup UI, content scripts (scoring/analysis), background service (API).
 
 ---
-
-## ✨ Customization
-
-- **Metric Tuning:** Adjust category weights/scoring logic in `content.js`.
-- **Platform Expansion:** Add more sites by updating selectors and logic.
-- **UI Styling:** Edit `content.css` and `popup.css` for branding/accessibility.
-
----
-
 
 ## 🧩 Troubleshooting & FAQ
 
-- **No Score Displayed:** Product page info may be missing; AI can supplement if enabled.
+- **No Score Displayed:** Product page info may be missing, remove extension and reimplement.
 - **API Key Issues:** For OpenAI, ensure your key is set securely in your backend.
 - **Styling Problems:** Confirm `content.css` and `popup.css` are not conflicting.
 
