@@ -35,7 +35,6 @@ async function scrapeProductText(url) {
     try {
         console.log(`Scraping URL: ${url}`);
         const { data } = await axios.get(url, {
-            // Use a realistic user-agent to avoid simple blocks[3]
             headers: {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
                 'Accept-Language': 'en-US,en;q=0.9',
@@ -46,15 +45,65 @@ async function scrapeProductText(url) {
         });
         const $ = cheerio.load(data);
         $('script, style, head, nav, footer, header, form').remove();
+
+        // 1. Try to get "How This Was Made"
+        let howMadeText = '';
+        $('[aria-label], h2, h3, h4, div, section').each((i, el) => {
+            const text = $(el).text();
+            if (/how this was made/i.test(text)) {
+                howMadeText = text + ' ' + $(el).next().text();
+            }
+        });
+        if (!howMadeText) {
+            $('*').each((i, el) => {
+                const text = $(el).text();
+                if (/how this was made/i.test(text)) {
+                    howMadeText = text;
+                }
+            });
+        }
+
+        // 2. If not found, get product description (meta or visible)
+        let productDescription = '';
+        if (!howMadeText) {
+            // Try meta tag
+            productDescription = $('meta[name="description"]').attr('content') || '';
+            // Try common description containers if meta is empty
+            if (!productDescription) {
+                productDescription = $('.description-preview, .product-description, .description, .product-summary').first().text().trim();
+            }
+        }
+
+        // 3. Sustainable Materials mentions
+        let sustainableMaterialsText = '';
+        $('*').each((i, el) => {
+            const text = $(el).text();
+            if (/sustainable materials/i.test(text)) {
+                sustainableMaterialsText += text + ' ';
+            }
+        });
+
+        // 4. Fallback: main body text
         const mainText = $('body').text().replace(/\s\s+/g, ' ').trim();
-        
-        if (mainText.length < 100) {
+
+        // 5. Combine prioritized sections
+        let combinedText = '';
+        if (howMadeText) {
+            combinedText = howMadeText + ' ' + sustainableMaterialsText + ' ' + mainText;
+        } else if (productDescription) {
+            combinedText = productDescription + ' ' + sustainableMaterialsText + ' ' + mainText;
+        } else {
+            combinedText = sustainableMaterialsText + ' ' + mainText;
+        }
+        combinedText = combinedText.trim();
+        if (combinedText.length > 5000) {
+            combinedText = combinedText.substring(0, 5000);
+        }
+        if (combinedText.length < 100) {
             console.warn("Scraped text is very short. The page might be protected or content-light.");
         }
-        
-        return mainText.substring(0, 5000); // Limit text to avoid overwhelming the API
+        return combinedText;
     } catch (error) {
-        // This is a critical error to catch if the site blocks the scraper[9][7]
         console.error(`Scraping failed for ${url}. Status: ${error.response?.status}`);
         throw new Error(`Could not access the product page. The website may be blocking automated requests.`);
     }
@@ -69,9 +118,11 @@ async function analyzeProduct(productData) {
     
     Webpage Text (first 5000 characters): "${productText}"
 
-    Evaluate it based on these criteria: Materials Sourcing, Manufacturing Impact, Product Durability, End-of-Life, and Packaging. For each, provide a score (0-100) and justification. If info is missing, use a score of -1.
+    Evaluate it based on these criteria: Materials Sourcing, Manufacturing Impact, Product Durability, End-of-Life, and Packaging. For each, provide a score (0-100) and justification. If info is missing for a category, use a score of -1 for that category, but if any sustainability features are present (e.g., recycled materials, organic cotton, eco-friendly packaging), give partial credit in the overall score. Only give 0 if there is truly no sustainability information at all.
+
+    Additionally, estimate an "infoCompleteness" value (0-100) representing how much relevant sustainability information is present in the text (0 = no info, 100 = all categories fully covered).
     
-    Provide a final "overallScore" and a concise "summary". Respond with only a valid JSON object.`;
+    Provide a final "overallScore", "infoCompleteness", and a concise "summary". Respond with only a valid JSON object.`;
 
     try {
         console.log('Calling OpenAI API...');
@@ -79,7 +130,7 @@ async function analyzeProduct(productData) {
             model: "gpt-4-turbo",
             response_format: { type: "json_object" },
             messages: [
-                { role: "system", content: "You are a sustainability expert. Analyze the provided text and respond with a valid JSON object as requested.[16]" },
+                { role: "system", content: "You are a sustainability expert. Analyze the provided text and respond with a valid JSON object as requested." },
                 { role: "user", content: prompt }
             ],
             temperature: 0.2,
@@ -87,7 +138,7 @@ async function analyzeProduct(productData) {
         });
         return JSON.parse(completion.choices[0].message.content);
     } catch (error) {
-        // This error now specifically points to an OpenAI failure[10][12]
+        // This error now specifically points to an OpenAI failure
         console.error('--- OpenAI API Error ---', error);
         throw new Error(`The AI analysis failed. This could be due to an API key issue or a problem with the AI service.`);
     }

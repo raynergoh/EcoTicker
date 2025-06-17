@@ -132,8 +132,78 @@ document.addEventListener('DOMContentLoaded', () => {
 
             scoreDisplay.className = `score-display score-${scoreClass}`;
             scoreDisplay.style.display = 'block';
-            scoreDisplay.querySelector('.score-value').textContent = `${score}/100`;
+            // If score is less than 5, show 'Lack of Information' in a styled box
+            const scoreValueElem = scoreDisplay.querySelector('.score-value');
+            if (score < 5) {
+                scoreValueElem.innerHTML = `<span style="display:inline-block;padding:4px 12px;font-size:22px;border:1.5px solid #bbb;border-radius:8px;background:#fafbfc;color:#888;">Lack of Information</span>`;
+            } else {
+                scoreValueElem.textContent = `${score}/100`;
+            }
             scoreDisplay.querySelector('.score-summary').textContent = analysis.summary;
+
+            // Add or update information bar
+            let infoBar = document.getElementById('info-bar');
+            if (!infoBar) {
+                infoBar = document.createElement('div');
+                infoBar.id = 'info-bar';
+                infoBar.style.margin = '8px 0';
+                infoBar.style.height = '8px';
+                infoBar.style.borderRadius = '4px';
+                infoBar.style.background = '#eee';
+                infoBar.style.position = 'relative';
+                scoreDisplay.appendChild(infoBar);
+                // Add labels
+                let leftLabel = document.createElement('span');
+                leftLabel.textContent = 'No information';
+                leftLabel.style.position = 'absolute';
+                leftLabel.style.left = '0';
+                leftLabel.style.top = '12px';
+                leftLabel.style.fontSize = '10px';
+                leftLabel.style.color = '#888';
+                infoBar.appendChild(leftLabel);
+                let rightLabel = document.createElement('span');
+                rightLabel.textContent = 'Full information';
+                rightLabel.style.position = 'absolute';
+                rightLabel.style.right = '0';
+                rightLabel.style.top = '12px';
+                rightLabel.style.fontSize = '10px';
+                rightLabel.style.color = '#888';
+                infoBar.appendChild(rightLabel);
+            } else {
+                infoBar.innerHTML = '';
+            }
+            // Calculate info completeness (if available, else use score as proxy)
+            let infoPercent = 0;
+            if (score === -1) {
+                infoPercent = 0;
+            } else if (typeof analysis.infoCompleteness === 'number') {
+                infoPercent = Math.max(0, Math.min(100, analysis.infoCompleteness));
+            } else {
+                infoPercent = Math.max(0, Math.min(100, score));
+            }
+            let fill = document.createElement('div');
+            fill.style.height = '100%';
+            fill.style.width = infoPercent + '%';
+            fill.style.background = '#28B463';
+            fill.style.borderRadius = '4px';
+            infoBar.appendChild(fill);
+            // Add labels again (after fill)
+            let leftLabel = document.createElement('span');
+            leftLabel.textContent = 'No information';
+            leftLabel.style.position = 'absolute';
+            leftLabel.style.left = '0';
+            leftLabel.style.top = '12px';
+            leftLabel.style.fontSize = '10px';
+            leftLabel.style.color = '#888';
+            infoBar.appendChild(leftLabel);
+            let rightLabel = document.createElement('span');
+            rightLabel.textContent = 'Full information';
+            rightLabel.style.position = 'absolute';
+            rightLabel.style.right = '0';
+            rightLabel.style.top = '12px';
+            rightLabel.style.fontSize = '10px';
+            rightLabel.style.color = '#888';
+            infoBar.appendChild(rightLabel);
 
             analyzeButton.classList.remove('loading');
             analyzeButton.innerHTML = `
