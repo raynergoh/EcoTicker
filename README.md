@@ -1,6 +1,6 @@
 # EcoTicker 🌱 — Sustainable Shopping Companion
 
-EcoTicker is a Chrome extension that empowers you to shop more sustainably by providing real-time sustainability scores and actionable insights for products and brands as you browse popular e-commerce sites. While currently optimized for Nike, EcoTicker is built for easy expansion to platforms like Amazon, IKEA, Walmart, Target, and Adidas.
+EcoTicker is a Chrome extension that empowers you to shop more sustainably by providing real-time sustainability scores and actionable insights for products and brands as you browse popular e-commerce sites. While currently optimized for Nike, EcoTicker is built for easy expansion to platforms like Amazon, NIKE, IKEA, and Adidas.
 
 ---
 
