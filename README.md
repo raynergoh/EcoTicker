@@ -1,32 +1,39 @@
 # EcoTicker 🌱 — Sustainable Shopping Companion
 
-EcoTicker is a Chrome extension that empowers you to shop more sustainably by providing real-time sustainability scores and actionable insights for products and brands as you browse popular e-commerce sites. While currently optimized for Nike, EcoTicker is built for easy expansion to platforms like Amazon, NIKE, IKEA, and Adidas.
+EcoTicker is a Chrome extension that empowers you to shop more sustainably by providing real-time sustainability scores and actionable insights for products and brands as you browse popular e-commerce sites. While currently optimized for Nike, EcoTicker is built for easy expansion to platforms (Currently Nike).
 
 ---
 
 ## 🚀 Features
 
-- **Instant Sustainability Scores:** See a clear A–F grade for each product as you shop, based on a transparent, research-driven metric.
+- **Instant Sustainability Scores:** See a clear score for each product as you shop, based on a transparent, research-driven metric.
 - **EcoPoints Rewards:** Earn points for sustainable purchases and redeem them for eco-friendly rewards.
-- **Sustainable Alternatives:** Get suggestions for greener products using AI and ESG data.
 - **Modern UI:** Enjoy a clean, intuitive popup and stylish in-page banners.
-- **Multi-Platform Ready:** Designed for Nike, with easy extensibility to more sites.
 
+To implement:
+- **Multi-Platform Ready:** Designed for Nike, with easy extensibility to more sites.
+- **Sustainable Alternatives:** Get suggestions for greener products using AI and ESG data. (Have not implement, In progress)
 ---
 
 ## 🛠️ How EcoTicker Works
 
-1. **Scan:** When you visit a product page, EcoTicker scans for sustainability keywords and material percentages (e.g., “recycled,” “organic”).
-2. **Score:** It applies a weighted metric, based on industry standards, to assign a grade.
-3. **Display:** A banner appears at the top of the page with the score and a quick summary.
-4. **Suggest:** Optionally, EcoTicker uses OpenAI’s API to recommend more sustainable alternatives—even if the product page lacks details.
-5. **Reward:** Earn EcoPoints for sustainable shopping, which you can track and redeem in the popup.
+When you visit a product page and press the "Analyze Sustainability" button in the extension, the following process occurs:
+
+- The backend uses **axios** to fetch the product page HTML.
+- It uses **cheerio** to parse the HTML and extract the main text content (removing scripts, nav, etc.).
+- The backend builds a prompt for OpenAI using the scraped text, product name, and your evaluation metric.
+- It sends the prompt to OpenAI (using your API key from `.env`).
+- The backend expects a JSON response with an overall score and summary.
+- The result is returned to the popup.
+- The extension displays a score and a quick summary to the user.
+- *(Yet to implement)*: Recommend more sustainable alternatives.
+- *(Yet to implement backend)*: Reward System, earning EcoPoints for sustainable shopping which is tracked and can be redeemed in the popup.
 
 ---
 
 ## 📊 Sustainability Metric
 
-EcoTicker’s scoring system is inspired by leading frameworks like Eco-Score, Higg Index, and The Sustainability Consortium. Each category is weighted for a total of 100%:
+EcoTicker's scoring system is inspired by leading frameworks like Eco-Score, Higg Index, and The Sustainability Consortium. Each category is weighted for a total of 100%:
 
 | Category                  | Weight (%) | Example Criteria                                  |
 |---------------------------|------------|---------------------------------------------------|
@@ -42,8 +49,8 @@ EcoTicker’s scoring system is inspired by leading frameworks like Eco-Score, H
   - B = 70–84  
   - C = 55–69  
   - D = 40–54  
-  - F = <40  
-  - No Info = -1.
+  - F = 5-40  
+  - No Info = <5
 
 ---
 
@@ -70,22 +77,108 @@ Earn EcoPoints for sustainable actions and redeem them for rewards:
 
 ## ⚡ Installation
 
-1. **Clone the Repository**
-git clone https://github.com/yourusername/ecoticker.git
+# EcoTicker Extension & Backend Setup Guide
 
+## 1. Clone the Repository
+```sh
+git clone <your-repo-url>
+cd EcoTicker
+```
 
-2. **Load in Chrome**
-- Go to `chrome://extensions/`
-- Enable "Developer mode"
-- Click "Load unpacked" and select the `ecoticker-extension` directory
+## 2. Install Backend Dependencies
+```sh
+cd server
+npm install
+```
+
+## 3. Set Up OpenAI API Key
+1. In the `server` directory, create a file named `.env`.
+2. Add your OpenAI API key to the file:
+   ```
+   PORT=3000
+   OPENAI_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+   CACHE_TTL=3600
+   ```
+   *(Replace with your actual OpenAI API key.)*
+
+## 4. Start the Backend Server
+```sh
+node server.js
+```
+- The server should run on `http://localhost:3000` by default.
+
+## 5. Install Chrome Extension
+1. Open Chrome and go to `chrome://extensions/`.
+2. Enable **Developer mode** (top right).
+3. Click **Load unpacked**.
+4. Select the `ecoticker-extension` folder inside your project directory.
+
+## 6. Using the Extension
+- Navigate to a supported product page (e.g., Nike).
+- Click the EcoTicker extension icon.
+- Click **Analyze Sustainability**.
+- Wait for the score and summary to appear.
+
+## 7. Troubleshooting
+- **If you see "Lack of Information" or errors:**
+  - Make sure your backend server is running.
+  - Ensure your `.env` file exists and contains a valid OpenAI API key.
+  - Check the terminal for backend errors.
+  - Make sure you have run `npm install` in the `server` directory.
+  - Ensure the product page is accessible and not region-locked.
+
+## 8. For Collaborators
+- Each user must create their own `.env` file with their own OpenAI API key.
+- Each user must run `npm install` in the `server` directory after cloning or pulling updates.
+
+## 9. (Optional) Updating Dependencies
+If you ever update `package.json`, run:
+```sh
+npm install
+```
+again in the `server` directory.
+
+**That's it! Your EcoTicker extension and backend should now be fully functional.**
+
 
 ---
 
 ## 📁 Project Structure
 
-📁 Project Structure
-ecoticker-extension/ ├── manifest.json # Extension config ├── popup.html # Popup UI ├── popup.js # Popup logic ├── popup.css # Popup styles ├── content.js # Injects banners, extracts data ├── content.css # Banner styles ├── background.js # Handles API calls, messaging ├── esg-data.json # ESG ratings data └── icon.png # Extension icon
+```
+EcoTicker/
+│
+├── ecoticker-extension/
+│   ├── background.js
+│   ├── config.template.json
+│   ├── content.css
+│   ├── content.js
+│   ├── esg-data.json
+│   ├── icon.png
+│   ├── manifest.json
+│   ├── openai-service.js
+│   ├── popup.css
+│   ├── popup.html
+│   ├── popup.js
+│   ├── sustainability-panel.js
+│   └── services/
+│       └── nike-analyzer.js
+│
+├── server/
+│   ├── index.js
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── server.js
+│   └── node_modules/
+│
+├── .gitignore
+├── README.md
 
+```
+- `ecoticker-extension/` — Chrome extension source code (UI, scripts, manifest, styles, ESG data, etc.)
+- `server/` — Node.js backend for scraping and OpenAI analysis
+- `.gitignore` — Git ignore rules
+- `README.md` — Project documentation
 
 ---
 
@@ -105,15 +198,6 @@ ecoticker-extension/ ├── manifest.json # Extension config ├── popup.
 
 ---
 
-## 🤝 Contributing
-
-1. Fork the repository.
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`).
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
-4. Push to the branch (`git push origin feature/AmazingFeature`).
-5. Open a Pull Request.
-
----
 
 ## 🧩 Troubleshooting & FAQ
 
@@ -124,13 +208,7 @@ ecoticker-extension/ ├── manifest.json # Extension config ├── popup.
 ---
 
 
-## 🙏 Acknowledgments
 
-- ESG data providers
-- Sustainable brand partners
-- Open-source community
-
----
 
 ## 🕒 Version History
 
@@ -146,3 +224,4 @@ Project Link: [https://github.com/raynergoh/ecoticker](https://github.com/rayner
 ---
 
 *Made with 💚 by the EcoTicker team*
+
