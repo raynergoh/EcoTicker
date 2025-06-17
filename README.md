@@ -1,11 +1,13 @@
 # EcoTicker 🌱 — Sustainable Shopping Companion
 
-EcoTicker is a Chrome extension that empowers you to shop more sustainably by providing real-time sustainability scores and actionable insights for products and brands as you browse popular e-commerce sites. While currently optimized for Nike, EcoTicker is built for easy expansion to platforms (Currently Nike).
+
+EcoTicker, a 2-day hackathon for LifeHack 2025, is a Chrome extension that empowers you to shop more sustainably by providing real-time sustainability scores and actionable insights for products and brands as you browse popular e-commerce sites. While currently optimized for Nike, EcoTicker is built for easy expansion to platforms (Currently Nike).
 
 ---
 ## Status
 
-- Completed the front-end aspect and have a rough working model and metrics for the calculating of sustainability score with some backend implementation. Yet to implement the backend for the points system as well as a recommend alternative function.
+- Completed the front-end aspect and have a rough working model and metrics for the calculating of sustainability score with some backend implementation. 
+- Yet to implement the backend for the points system as well as a recommend alternative function.
 
 ---
 
