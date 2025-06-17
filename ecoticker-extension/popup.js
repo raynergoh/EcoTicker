@@ -56,4 +56,64 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Set the initial active tab
     switchTab('home');
+
+    // Show website/brand sustainability score
+    if (window.chrome && chrome.tabs) {
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+            const tab = tabs[0];
+            if (tab && tab.url) {
+                // Extract domain/brand
+                let brand = null;
+                const url = new URL(tab.url);
+                if (url.hostname.includes('nike')) brand = 'Nike';
+                else if (url.hostname.includes('ikea')) brand = 'IKEA';
+                else if (url.hostname.includes('amazon')) brand = 'Amazon';
+                else if (url.hostname.includes('h&m')) brand = 'H&M';
+                else if (url.hostname.includes('zara')) brand = 'Zara';
+                else if (url.hostname.includes('patagonia')) brand = 'Patagonia';
+                else if (url.hostname.includes('tentree')) brand = 'Tentree';
+                else if (url.hostname.includes('allbirds')) brand = 'Allbirds';
+
+                if (brand) {
+                    fetch(chrome.runtime.getURL('esg-data.json'))
+                        .then(r => r.json())
+                        .then(data => {
+                            const score = data[brand];
+                            document.getElementById('brand-score-value').textContent = score ? score : '-';
+                        });
+                }
+            }
+        });
+    }
+
+    // Sustainability analysis logic
+    const analyzeBtn = document.getElementById('analyze-btn');
+    const analysisContainer = document.getElementById('sustainability-analysis-container');
+    if (analyzeBtn) {
+        analyzeBtn.addEventListener('click', () => {
+            if (window.chrome && chrome.tabs) {
+                chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+                    const tab = tabs[0];
+                    if (tab && tab.url) {
+                        if (window.analyzeProductSustainability) {
+                            document.getElementById('sustainability-score').textContent = 'Loading...';
+                            document.getElementById('sustainability-analysis').textContent = '';
+                            document.getElementById('sustainability-alternative').textContent = '';
+                            analysisContainer.style.display = 'block';
+                            window.analyzeProductSustainability(tab.url).then(result => {
+                                document.getElementById('sustainability-score').textContent = `Sustainability Score: ${result.sustainabilityScore}/100`;
+                                document.getElementById('sustainability-analysis').textContent = result.analysis;
+                                if (result.alternatives && result.alternatives.length > 0) {
+                                    const alt = result.alternatives[0];
+                                    document.getElementById('sustainability-alternative').innerHTML = `<a href="${alt.url}" target="_blank">${alt.name}</a> (Score: ${alt.sustainabilityScore})<br><span style='font-size:12px;color:#28B463;'>${alt.reason}</span>`;
+                                }
+                            }).catch(() => {
+                                document.getElementById('sustainability-score').textContent = 'Could not analyze product.';
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    }
 });
