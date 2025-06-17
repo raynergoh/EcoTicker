@@ -73,7 +73,7 @@ Earn EcoPoints for sustainable actions and redeem them for rewards:
 1. **Clone the Repository**
 git clone https://github.com/yourusername/ecoticker.git
 
-text
+
 2. **Load in Chrome**
 - Go to `chrome://extensions/`
 - Enable "Developer mode"
@@ -83,18 +83,9 @@ text
 
 ## 📁 Project Structure
 
-ecoticker-extension/
-├── manifest.json # Extension config
-├── popup.html # Popup UI
-├── popup.js # Popup logic
-├── popup.css # Popup styles
-├── content.js # Injects banners, extracts data
-├── content.css # Banner styles
-├── background.js # Handles API calls, messaging
-├── esg-data.json # ESG ratings data
-└── icon.png # Extension icon
+📁 Project Structure
+ecoticker-extension/ ├── manifest.json # Extension config ├── popup.html # Popup UI ├── popup.js # Popup logic ├── popup.css # Popup styles ├── content.js # Injects banners, extracts data ├── content.css # Banner styles ├── background.js # Handles API calls, messaging ├── esg-data.json # ESG ratings data └── icon.png # Extension icon
 
-text
 
 ---
 
