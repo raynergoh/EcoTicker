@@ -78,41 +78,76 @@ document.addEventListener('DOMContentLoaded', () => {
                         .then(r => r.json())
                         .then(data => {
                             const score = data[brand];
-                            document.getElementById('brand-score-value').textContent = score ? score : '-';
+                            const brandScoreElem = document.getElementById('brand-score-value');
+                            if (brandScoreElem) {
+                                brandScoreElem.textContent = score ? score : '-';
+                            }
                         });
                 }
             }
         });
     }
 
-    // Sustainability analysis logic
-    const analyzeBtn = document.getElementById('analyze-btn');
-    const analysisContainer = document.getElementById('sustainability-analysis-container');
-    if (analyzeBtn) {
-        analyzeBtn.addEventListener('click', () => {
-            if (window.chrome && chrome.tabs) {
-                chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-                    const tab = tabs[0];
-                    if (tab && tab.url) {
-                        if (window.analyzeProductSustainability) {
-                            document.getElementById('sustainability-score').textContent = 'Loading...';
-                            document.getElementById('sustainability-analysis').textContent = '';
-                            document.getElementById('sustainability-alternative').textContent = '';
-                            analysisContainer.style.display = 'block';
-                            window.analyzeProductSustainability(tab.url).then(result => {
-                                document.getElementById('sustainability-score').textContent = `Sustainability Score: ${result.sustainabilityScore}/100`;
-                                document.getElementById('sustainability-analysis').textContent = result.analysis;
-                                if (result.alternatives && result.alternatives.length > 0) {
-                                    const alt = result.alternatives[0];
-                                    document.getElementById('sustainability-alternative').innerHTML = `<a href="${alt.url}" target="_blank">${alt.name}</a> (Score: ${alt.sustainabilityScore})<br><span style='font-size:12px;color:#28B463;'>${alt.reason}</span>`;
-                                }
-                            }).catch(() => {
-                                document.getElementById('sustainability-score').textContent = 'Could not analyze product.';
-                            });
-                        }
-                    }
-                });
+    // Replace sustainability score display with Analyze Sustainability button
+    const analyzeButton = document.getElementById('analyze-button');
+    const scoreDisplay = document.getElementById('score-display');
+
+    analyzeButton.addEventListener('click', async () => {
+        if (analyzeButton.classList.contains('loading')) {
+            return;
+        }
+
+        analyzeButton.classList.add('loading');
+        analyzeButton.innerHTML = `
+            <span class="icon">⭕</span>
+            <span>Analyzing...</span>
+        `;
+        scoreDisplay.style.display = 'none';
+
+        try {
+            const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+            const productData = {
+                url: tab.url,
+                name: tab.title
+            };
+
+            // Call the backend API
+            const response = await fetch('http://localhost:3000/api/analyze', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ productData })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to analyze product');
             }
-        });
-    }
+
+            const analysis = await response.json();
+            const score = analysis.overallScore;
+            const scoreClass = score >= 80 ? 'excellent' : 
+                                 score >= 60 ? 'good' : 
+                                 score >= 40 ? 'fair' : 'poor';
+
+            scoreDisplay.className = `score-display score-${scoreClass}`;
+            scoreDisplay.style.display = 'block';
+            scoreDisplay.querySelector('.score-value').textContent = `${score}/100`;
+            scoreDisplay.querySelector('.score-summary').textContent = analysis.summary;
+
+            analyzeButton.classList.remove('loading');
+            analyzeButton.innerHTML = `
+                <span class="icon">🔄</span>
+                <span>Analyze Again</span>
+            `;
+
+        } catch (error) {
+            console.error('Error analyzing product:', error);
+            analyzeButton.classList.remove('loading');
+            analyzeButton.innerHTML = `
+                <span class="icon">❌</span>
+                <span>Try Again</span>
+            `;
+        }
+    });
 });
