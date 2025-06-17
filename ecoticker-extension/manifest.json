@@ -36,7 +36,6 @@
     ],
     "js": [
       "openai-service.js",
-      "sustainability-panel.js",
       "content.js"
     ],
     "css": ["content.css"],
@@ -47,7 +46,6 @@
     "resources": [
       "esg-data.json",
       "openai-service.js",
-      "sustainability-panel.js",
       "config.json"
     ],
     "matches": ["<all_urls>"]

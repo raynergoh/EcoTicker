@@ -143,45 +143,6 @@ again in the `server` directory.
 
 ---
 
-## 📁 Project Structure
-
-```
-EcoTicker/
-│
-├── ecoticker-extension/
-│   ├── background.js
-│   ├── config.template.json
-│   ├── content.css
-│   ├── content.js
-│   ├── esg-data.json
-│   ├── icon.png
-│   ├── manifest.json
-│   ├── openai-service.js
-│   ├── popup.css
-│   ├── popup.html
-│   ├── popup.js
-│   ├── sustainability-panel.js
-│   └── services/
-│       └── nike-analyzer.js
-│
-├── server/
-│   ├── index.js
-│   ├── package.json
-│   ├── package-lock.json
-│   ├── server.js
-│   └── node_modules/
-│
-├── .gitignore
-├── README.md
-
-```
-- `ecoticker-extension/` — Chrome extension source code (UI, scripts, manifest, styles, ESG data, etc.)
-- `server/` — Node.js backend for scraping and OpenAI analysis
-- `.gitignore` — Git ignore rules
-- `README.md` — Project documentation
-
----
-
 ## 🛠️ Development
 
 - **Prerequisites:** Chrome Browser, basic JS & Chrome Extension API knowledge.
