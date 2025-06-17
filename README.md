@@ -1,74 +1,30 @@
-EcoTicker Browser Extension 🌱
-EcoTicker is a Chrome extension that empowers users to make more sustainable shopping choices by providing real-time sustainability scores for products and brands while browsing popular e-commerce websites. The extension is currently optimized for Nike but is architected for easy expansion to other major e-commerce platforms such as Amazon, IKEA, Walmart, Target, and Adidas.
+EcoTicker 🌱 — Sustainable Shopping Companion
+EcoTicker is a Chrome extension that empowers you to shop more sustainably by providing real-time sustainability scores and actionable insights for products and brands as you browse popular e-commerce sites. While currently optimized for Nike, EcoTicker is built to support expansion to other major platforms like Amazon, IKEA, Walmart, Target, and Adidas.
 
-Table of Contents
-Features
+🚀 Features
+Instant Sustainability Scores: See a clear A–F grade for each product as you shop, based on a transparent, research-driven metric.
 
-How It Works
+EcoPoints Rewards: Earn points for sustainable purchases and redeem them for eco-friendly rewards.
 
-Sustainability Metric
+Sustainable Alternatives: Get suggestions for greener products using AI and ESG data.
 
-Rewards Program
+Modern UI: Enjoy a clean, intuitive popup and stylish in-page banners.
 
-Installation
+Multi-Platform Ready: Designed for Nike, with easy extensibility to more sites.
 
-Project Structure
+🛠️ How EcoTicker Works
+Scan: When you visit a product page, EcoTicker scans for sustainability keywords and material percentages (e.g., “recycled,” “organic”).
 
-Development
+Score: It applies a weighted metric, based on industry standards, to assign a grade.
 
-Customization
+Display: A banner appears at the top of the page with the score and a quick summary.
 
-Contributing
+Suggest: Optionally, EcoTicker uses OpenAI’s API to recommend more sustainable alternatives—even if the product page lacks details.
 
-Troubleshooting & FAQ
+Reward: Earn EcoPoints for sustainable shopping, which you can track and redeem in the popup.
 
-License
-
-Acknowledgments
-
-Contact
-
-Version History
-
-Features
-🎯 Core Functionality
-Real-time product sustainability scoring: Instantly see a product’s sustainability grade while shopping.
-
-EcoPoints reward system: Earn points for sustainable purchases and redeem them for eco-friendly rewards.
-
-Multi-platform support: Built for Nike, with support for Amazon, IKEA, Walmart, Target, and Adidas planned.
-
-📊 Sustainability Analysis
-Product-level sustainability scoring: Uses a transparent, research-driven metric to assign scores.
-
-Visual grade representation: Grades displayed as A, B, or C for easy interpretation.
-
-Sustainable alternative suggestions: Recommends greener alternatives using AI and ESG data.
-
-💎 User Interface
-Modern popup UI: Features three main sections:
-
-Home: View current product sustainability information.
-
-Rewards: Track EcoPoints and available rewards.
-
-About: Extension information and version details.
-
-In-page banners: Non-intrusive banners display scores directly on product pages.
-
-How It Works
-Page Scan: When you visit a supported product page, EcoTicker scans for sustainability keywords and material percentages (e.g., "recycled," "organic").
-
-Score Calculation: Applies a weighted metric based on industry standards and Nike’s sustainability disclosures to assign a grade.
-
-Display: Shows a banner at the top of the page with the score and a brief justification.
-
-Alternative Suggestions: Optionally uses OpenAI’s API to find and display more sustainable alternatives, even if product data is limited.
-
-Popup Dashboard: Clicking the extension icon opens a popup with your EcoPoints, rewards, and additional details.
-
-Sustainability Metric
-EcoTicker’s metric is grounded in leading sustainability frameworks (Eco-Score, Higg Index, The Sustainability Consortium) and is tailored for product-level analysis. Each category is weighted for a total of 100%:
+📊 Sustainability Metric
+EcoTicker’s scoring system is inspired by leading frameworks like Eco-Score, Higg Index, and The Sustainability Consortium. Each category is weighted for a total of 100%:
 
 Category	Weight (%)	Example Criteria
 Materials Sourcing	40	% recycled/organic/certified materials
@@ -92,85 +48,64 @@ F = <40
 
 No Info = -1.
 
-Rewards Program
-EcoPoints: Earned for sustainable shopping choices.
+🏆 Rewards Program
+Earn EcoPoints for sustainable actions and redeem them for rewards:
 
-Redeemable Rewards:
+Reward	Points Needed
+$10 Tentree Voucher	500
+Patagonia Tote Bag	1000
+Allbirds Discount (20%)	2000
+1-Year Climate Newsletter Subscription	3500
+🎨 User Experience
+Popup: Three main tabs—Home (current product info), Rewards (track points, redeem), About (extension details).
 
-$10 Tentree Voucher (500 points)
+Banner: Non-intrusive, visually appealing sustainability score at the top of product pages.
 
-Patagonia Tote Bag (1000 points)
+Responsive Design: Looks great on all supported platforms.
 
-Allbirds Discount (20%) (2000 points)
-
-1-Year Climate Newsletter Subscription (3500 points).
-
-Installation
-Clone this repository:
+⚡ Installation
+Clone the Repository
 
 bash
 git clone https://github.com/yourusername/ecoticker.git
-Load in Chrome:
+Load in Chrome
 
 Go to chrome://extensions/
 
 Enable "Developer mode"
 
-Click "Load unpacked" and select the ecoticker-extension directory.
+Click "Load unpacked" and select the ecoticker-extension directory
 
-Project Structure
+📁 Project Structure
 text
 ecoticker-extension/
-├── manifest.json        # Extension configuration
-├── popup.html           # Main extension popup interface
-├── popup.js             # Popup functionality
-├── popup.css            # Styling for popup
-├── content.js           # Content script for web page interaction
-├── content.css          # Styling for injected content
-├── background.js        # Background service worker
+├── manifest.json        # Extension config
+├── popup.html           # Popup UI
+├── popup.js             # Popup logic
+├── popup.css            # Popup styles
+├── content.js           # Injects banners, extracts data
+├── content.css          # Banner styles
+├── background.js        # Handles API calls, messaging
 ├── esg-data.json        # ESG ratings data
 └── icon.png             # Extension icon
-content.js: Scans product pages, extracts info, injects banners.
+🛠️ Development
+Prerequisites: Chrome Browser, basic JS & Chrome Extension API knowledge.
 
-background.js: Handles API calls (e.g., OpenAI), message routing.
+Workflow: Edit source files, reload extension, test on supported sites.
 
-popup.*: Popup UI for EcoPoints and rewards.
+Key Components: Popup UI, content scripts (scoring/analysis), background service (storage, API).
 
-content.css/popup.css: Separate styles for banners and popup UI.
+✨ Customization
+Metric Tuning: Adjust category weights/scoring logic in content.js.
 
-esg-data.json: Static ESG data for products/brands.
+Platform Expansion: Add more sites by updating selectors and logic.
 
-Development
-Prerequisites
-Chrome Browser
+UI Styling: Edit content.css and popup.css for branding/accessibility.
 
-Basic understanding of JavaScript and Chrome Extension APIs
-
-Local Development
-Make changes to the source files.
-
-Reload the extension in Chrome.
-
-Test on supported e-commerce sites.
-
-Key Components
-Popup Interface: Main user interaction point.
-
-Content Scripts: Analyze and inject sustainability data.
-
-Background Service: Handles points system and storage.
-
-Customization
-Metric Tuning: Adjust category weights or scoring logic in content.js to reflect new research or support additional sites.
-
-Add/Remove Features: Enable or disable OpenAI-powered alternative suggestions in background.js.
-
-UI Styling: Modify content.css and popup.css for branding or accessibility.
-
-Contributing
+🤝 Contributing
 Fork the repository.
 
-Create your feature branch (git checkout -b feature/AmazingFeature).
+Create a feature branch (git checkout -b feature/AmazingFeature).
 
 Commit your changes (git commit -m 'Add some AmazingFeature').
 
@@ -178,39 +113,28 @@ Push to the branch (git push origin feature/AmazingFeature).
 
 Open a Pull Request.
 
-Troubleshooting & FAQ
-No Score Displayed: The extension relies on product page info. If none is found, it may show “No Info” or use AI to supplement.
+🧩 Troubleshooting & FAQ
+No Score Displayed: Product page info may be missing; AI can supplement if enabled.
 
-API Key Issues: If using OpenAI, ensure your API key is set securely in your backend.
+API Key Issues: For OpenAI, ensure your key is set securely in your backend.
 
-Styling Problems: Make sure content.css and popup.css are not conflicting.
+Styling Problems: Confirm content.css and popup.css are not conflicting.
 
-License
-This project is licensed under the MIT License - see the LICENSE file for details.
+📜 License
+MIT License
 
-Acknowledgments
+🙏 Acknowledgments
 ESG data providers
 
 Sustainable brand partners
 
 Open-source community
 
-Version History
-1.2: Current release
+🕒 Version History
+1.2: Improved UI/UX, rewards system, enhanced sustainability scoring.
 
-Improved UI/UX
+📬 Contact
+Your Name — @yourusername
+Project Link: https://github.com/yourusername/ecoticker
 
-Added rewards system
-
-Enhanced sustainability scoring
-
-Contact
-Name - Rayner Goh
-Project Link: https://github.com/raynergoh/EcoTicker
-
-Made with 💚 by Elders
-Project Link: [https://github.com/yourusername/ecoticker](https://github.com/yourusername/ecoticker)
-
----
-
-Made with 💚 by Elders
+Made with 💚 by the EcoTicker team
