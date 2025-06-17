@@ -28,7 +28,7 @@ When you visit a product page and press the "Analyze Sustainability" button in t
 
 - The backend uses **axios** to fetch the product page HTML.
 - It uses **cheerio** to parse the HTML and extract the main text content (removing scripts, nav, etc.).
-- The backend builds a prompt for OpenAI using the scraped text, product name, and your evaluation metric.
+- The backend builds a prompt for OpenAI using the scraped text, product name, and the evaluation metric.
 - It sends the prompt to OpenAI (using your API key from `.env`).
 - The backend expects a JSON response with an overall score and summary.
 - The result is returned to the popup.
@@ -188,7 +188,7 @@ again in the `server` directory.
 
 Rayner Goh (raynergoh03@gmail.com)
 Yeo Chen Xian (chenxian0603@gmail.com)
-Josh Loh
+Josh Loh (joshloh03@gmail.com)
 Project Link: [https://github.com/raynergoh/ecoticker](https://github.com/raynergoh/ecoticker)
 
 ---
