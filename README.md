@@ -178,8 +178,11 @@ again in the `server` directory.
 ## 📬 Contact
 
 Rayner Goh (raynergoh03@gmail.com)
+
 Yeo Chen Xian (chenxian0603@gmail.com)
+
 Josh Loh (joshloh03@gmail.com)
+
 Project Link: [https://github.com/raynergoh/ecoticker](https://github.com/raynergoh/ecoticker)
 
 ---
